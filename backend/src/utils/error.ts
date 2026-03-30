@@ -10,3 +10,15 @@ export class AppError extends Error {
     this.message = message;
   }
 }
+
+export class NotFoundError extends AppError {
+  constructor(message: string) {
+    super("NotFound", 404, message);
+  }
+}
+
+export class AuthError extends AppError {
+  constructor(message: string) {
+    super("AuthError", 400, message);
+  }
+}

@@ -19,6 +19,10 @@ export const preparedRegisterUser = db
   })
   .prepare("register-user");
 
+/**
+ * @param email     string - email of user
+ * @returns         Array - Promise to fetch user by email
+ */
 export const preparedFetchUserByEmail = db
   .select()
   .from(user)
