@@ -1,5 +1,6 @@
 import { NextFunction, Router, Request, Response } from "express";
 import { loginUser, registerUser } from "src/controller/authController";
+import isLoggedIn from "src/middleware/isLoggedIn";
 import { AppError, NotFoundError } from "src/utils/error";
 
 const router = Router();
@@ -48,6 +49,10 @@ router.route("/login").post(async (req: Request, res: Response) => {
 
     const userFromDatabase = await loginUser(email, password);
 
+    req.session.userId = userFromDatabase.id;
+    req.session.email = userFromDatabase.email;
+    req.session.save();
+
     return res.status(200).send({
       message: "Login Successful!",
       user: {
@@ -65,6 +70,23 @@ router.route("/login").post(async (req: Request, res: Response) => {
 
     return res.status(500).send({ message: "Error occurred while logging in user!" });
   }
+});
+
+/**
+ * @route       /api/v1/auth/logout
+ * @method      POST
+ * @desc        Logout the current user
+ * @access      Auth User
+ */
+router.route("/logout").post(isLoggedIn, async (req: Request, res: Response) => {
+  req.session.destroy((error) => {
+    if (error) {
+      return res.status(500).send({ message: "Could not logout user!" });
+    } else {
+      res.clearCookie("connect.sid");
+      return res.status(200).send({ message: "Logged out successfully!" });
+    }
+  });
 });
 
 export default router;

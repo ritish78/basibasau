@@ -12,6 +12,10 @@ const environmentVariableSchema = z.object({
   POSTGRES_PASSWORD: z.string().trim().min(1),
   POSTGRES_PORT: z.number().positive().int(),
   POSTGRES_DATA_URL: z.string().trim().min(1),
+  REDIS_HOST: z.string().trim().min(1),
+  REDIS_PORT: z.number().positive().int(),
+  REDIS_URL: z.string().trim().min(1),
+  REDIS_SECRET: z.string().trim().min(1),
 });
 
 try {
