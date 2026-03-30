@@ -6,6 +6,11 @@ import { z } from "zod";
 const environmentVariableSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
   EXPRESS_SERVER_PORT: z.string().trim().min(1),
+  POSTGRES_HOST: z.string().trim().min(1),
+  POSTGRES_DATABASE: z.string().trim().min(1),
+  POSTGRES_USER: z.string().trim().min(1),
+  POSTGRES_PASSWORD: z.string().trim().min(1),
+  POSTGRES_PORT: z.number().positive().int(),
 });
 
 try {

@@ -1,0 +1,50 @@
+services:
+  basibasaubackend:
+    container_name: basibasaubackend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - basibasaupostgres
+    volumes:
+      - ./backend:/home/basibasau
+      - /home/basibasau/node_modules
+    command: npm run dev
+
+  basibasaupostgres:
+    container_name: basibasaupostgres
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: basibasau
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - baisbasaunetwork
+
+  adminerbasibasau:
+    container_name: adminerbasibasau
+    image: adminer:5
+    environment:
+      ADMINER_DEFAULT_SERVER: basibasaupostgres
+    restart: unless-stopped
+    networks:
+      - baisbasaunetwork
+    ports:
+      - 8080:8080
+    depends_on:
+      - basibasaupostgres
+
+volumes:
+  postgres_data:
+
+networks:
+  baisbasaunetwork:
