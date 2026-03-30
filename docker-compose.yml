@@ -6,8 +6,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - 5000:5000
+    environment:
+      - POSGRES_URL=postgresql://admin:root@basibasaupostgres:5432/basibasau
     env_file:
       - ./backend/.env
+    networks:
+      - basibasaunetwork
     depends_on:
       - basibasaupostgres
     volumes:
@@ -20,6 +24,7 @@ services:
     image: postgres:18-alpine
     restart: unless-stopped
     environment:
+      POSTGRES_HOST: basibasaupostgres
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: root
       POSTGRES_DB: basibasau
@@ -28,7 +33,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - baisbasaunetwork
+      - basibasaunetwork
 
   adminerbasibasau:
     container_name: adminerbasibasau
@@ -37,7 +42,7 @@ services:
       ADMINER_DEFAULT_SERVER: basibasaupostgres
     restart: unless-stopped
     networks:
-      - baisbasaunetwork
+      - basibasaunetwork
     ports:
       - 8080:8080
     depends_on:
@@ -47,4 +52,4 @@ volumes:
   postgres_data:
 
 networks:
-  baisbasaunetwork:
+  basibasaunetwork:

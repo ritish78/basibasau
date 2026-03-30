@@ -1,21 +1,11 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import pkg from "pg";
-import {
-  POSTGRES_DATABASE,
-  POSTGRES_HOST,
-  POSTGRES_PASSWORD,
-  POSTGRES_PORT,
-  POSTGRES_USER,
-} from "src/config";
+import { POSRGRES_DATA_URL } from "src/config";
 
 const { Pool } = pkg;
 
 const pool: pkg.Pool = new Pool({
-  host: POSTGRES_HOST,
-  database: POSTGRES_DATABASE,
-  user: POSTGRES_USER,
-  password: POSTGRES_PASSWORD,
-  port: POSTGRES_PORT,
+  connectionString: POSRGRES_DATA_URL,
 });
 
 pool.on("connect", () => {
