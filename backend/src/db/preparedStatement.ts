@@ -1,6 +1,7 @@
 import { user } from "src/models/user";
 import db from ".";
 import { eq, sql } from "drizzle-orm";
+import { property } from "src/models/property";
 
 /**
  * @param firstName string - firstName of user
@@ -28,3 +29,5 @@ export const preparedFetchUserByEmail = db
   .from(user)
   .where(eq(user.email, sql.placeholder("email")))
   .prepare("fetch-user-by-email");
+
+export const preparedGetListOfProperties = db.select().from(property).prepare("fetch-properties");

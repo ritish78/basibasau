@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import authRoute from "./routes/auth";
+import propertyRoute from "./routes/property";
 
 import session from "express-session";
 import redisClient from "./db/redis";
@@ -41,6 +42,7 @@ app.get("/api/v1/ping", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/property", propertyRoute);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   if (error instanceof AppError) {
