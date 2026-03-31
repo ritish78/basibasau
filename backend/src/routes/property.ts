@@ -1,7 +1,13 @@
 import { Router, Request, Response } from "express";
 import { dummyPropertyData } from "seed";
-import { getListOfProperties, seedProperty } from "src/controller/propertyController";
+import {
+  getListOfProperties,
+  getPropertyByItsId,
+  likeProperty,
+  seedProperty,
+} from "src/controller/propertyController";
 import isLoggedIn from "src/middleware/isLoggedIn";
+import { AppError, AuthError, NotFoundError } from "src/utils/error";
 
 const router = Router();
 
@@ -39,5 +45,32 @@ router.route("/").get(async (req: Request, res: Response) => {
     res.status(500).send({ message: "Error while fetching list of properties from database!" });
   }
 });
+
+router.route("/:propertyId").get(async (req: Request<{ propertyId: string }>, res: Response) => {
+  try {
+    console.log("Fetching property of id:", req.params.propertyId);
+    const propertyById = await getPropertyByItsId(req.params.propertyId);
+
+    if (propertyById) {
+      res.status(200).send(propertyById);
+    } else {
+      res.status(404).send({ message: "Property of provided id does not exists!" });
+    }
+  } catch (error) {
+    console.log("Error while fetching property from database!");
+    res.status(500).send({ message: "Error while fetching property from database!" });
+  }
+});
+
+router
+  .route("/:propertyId/like")
+  .post(isLoggedIn, async (req: Request<{ propertyId: string }>, res: Response) => {
+    if (!req.session.userId) {
+      throw new AuthError("Login to like the property!");
+    }
+    const likedProperty = await likeProperty(req.params.propertyId, req.session.userId);
+
+    res.status(200).send({ message: `Property of id ${req.params.propertyId} liked!` });
+  });
 
 export default router;
