@@ -102,9 +102,11 @@ router.route("/me").get(isLoggedIn, async (req: Request, res: Response) => {
   const userBySessionEmail = await getUserByEmail(req.session.email);
 
   return res.status(200).send({
-    firstName: userBySessionEmail.firstName,
-    lastName: userBySessionEmail.lastName,
-    email: userBySessionEmail.email,
+    user: {
+      firstName: userBySessionEmail.firstName,
+      lastName: userBySessionEmail.lastName,
+      email: userBySessionEmail.email,
+    },
   });
 });
 
