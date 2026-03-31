@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { BACKEND_API_BASE_URL } from "@/lib/constants";
+import { CLIENT_API_BASE_URL } from "@/lib/constants";
 
 interface User {
   id: string;
@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAuth = async () => {
     try {
-      const res = await fetch(`${BACKEND_API_BASE_URL}/auth/me`, {
+      const res = await fetch(`${CLIENT_API_BASE_URL}/auth/me`, {
         credentials: "include",
       });
       if (res.ok) {
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
-    const res = await fetch(`${BACKEND_API_BASE_URL}/auth/login`, {
+    const res = await fetch(`${CLIENT_API_BASE_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = async (firstName: string, lastName: string, email: string, password: string) => {
-    const res = await fetch(`${BACKEND_API_BASE_URL}/auth/register`, {
+    const res = await fetch(`${CLIENT_API_BASE_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    await fetch(`${BACKEND_API_BASE_URL}/auth/logout`, {
+    await fetch(`${CLIENT_API_BASE_URL}/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
