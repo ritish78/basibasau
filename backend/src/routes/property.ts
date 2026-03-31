@@ -3,9 +3,11 @@ import { dummyPropertyData } from "seed";
 import {
   getListOfProperties,
   getPropertyByItsId,
+  hasUserAlreadyLikedProperty,
   likeProperty,
   seedProperty,
 } from "src/controller/propertyController";
+// import { preparedIncreaseViewsOfProperty } from "src/db/preparedStatement";
 import isLoggedIn from "src/middleware/isLoggedIn";
 import { AppError, AuthError, NotFoundError } from "src/utils/error";
 
@@ -71,6 +73,21 @@ router
     const likedProperty = await likeProperty(req.params.propertyId, req.session.userId);
 
     res.status(200).send({ message: `Property of id ${req.params.propertyId} liked!` });
+  });
+
+router
+  .route("/:propertyId/liked")
+  .get(isLoggedIn, async (req: Request<{ propertyId: string }>, res: Response) => {
+    if (!req.session.userId) {
+      throw new AuthError("Login to coninue!");
+    }
+
+    const userAlreadyLikedProperty = await hasUserAlreadyLikedProperty(
+      req.params.propertyId,
+      req.session.userId,
+    );
+
+    res.status(200).send({ liked: userAlreadyLikedProperty });
   });
 
 export default router;

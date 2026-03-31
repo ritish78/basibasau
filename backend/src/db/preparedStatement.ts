@@ -49,6 +49,16 @@ export const preparedGetPropertyByItsId = db
 
 /**
  * @param propertyId    string - uuid of the property
+ * @returns             string - Promise to increase views of the property by 1
+ */
+export const preparedIncreaseViewsOfProperty = db
+  .update(property)
+  .set({ views: sql`${property.views} + 1` })
+  .where(eq(property.id, sql.placeholder("propertyId")))
+  .prepare("increase-property-views");
+
+/**
+ * @param propertyId    string - uuid of the property
  * @param userId        string - uuid of the user
  * @returns             Array - property that the user has liked
  */

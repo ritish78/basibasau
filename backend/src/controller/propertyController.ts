@@ -5,6 +5,7 @@ import {
   preparedGetListOfProperties,
   preparedGetPropertyByItsId,
   preparedIncreaseLikeOfProperty,
+  preparedIncreaseViewsOfProperty,
   preparedRemoveLikeFromProperty,
   preparedUserHasLikedProperty,
 } from "src/db/preparedStatement";
@@ -52,6 +53,7 @@ export const getListOfProperties = async () => {
  */
 export const getPropertyByItsId = async (id: string) => {
   const [propertyByItsId] = await preparedGetPropertyByItsId.execute({ propertyId: id });
+  await preparedIncreaseViewsOfProperty.execute({ propertyId: id });
 
   return propertyByItsId;
 };
@@ -67,6 +69,7 @@ export const likeProperty = async (propertyId: string, userId: string) => {
     throw new NotFoundError("Property to like/unlike does not exists!");
   }
 
+  //Implemented similar function below
   const [userHasAlreadyLikedProperty] = await preparedUserHasLikedProperty.execute({ propertyId, userId });
 
   console.log("User has Already Liked Property:", userHasAlreadyLikedProperty);
@@ -86,4 +89,10 @@ export const likeProperty = async (propertyId: string, userId: string) => {
       preparedIncreaseLikeOfProperty.execute({ propertyId }),
     ]);
   }
+};
+
+export const hasUserAlreadyLikedProperty = async (propertyId: string, userId: string) => {
+  const [userHasAlreadyLikedProperty] = await preparedUserHasLikedProperty.execute({ propertyId, userId });
+
+  return userHasAlreadyLikedProperty ? true : false;
 };
