@@ -3,7 +3,7 @@
 1. First clone the repo:
 
 ```
-git clone
+git clone https://github.com/ritish78/basibasau.git
 ```
 
 2. Then, go inside the local folder:
