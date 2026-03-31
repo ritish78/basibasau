@@ -5,6 +5,7 @@ import {
   getPropertyByItsId,
   hasUserAlreadyLikedProperty,
   likeProperty,
+  listOfLikedPropertiesOfUser,
   seedProperty,
 } from "src/controller/propertyController";
 // import { preparedIncreaseViewsOfProperty } from "src/db/preparedStatement";
@@ -46,6 +47,15 @@ router.route("/").get(async (req: Request, res: Response) => {
     console.log("Error while fetching list of properties from database!");
     res.status(500).send({ message: "Error while fetching list of properties from database!" });
   }
+});
+
+router.route("/favourites").get(isLoggedIn, async (req: Request, res: Response) => {
+  if (!req.session.userId) {
+    throw new AuthError("Login to continue!");
+  }
+  const likedProperties = await listOfLikedPropertiesOfUser(req.session.userId);
+
+  res.status(200).send(likedProperties);
 });
 
 router.route("/:propertyId").get(async (req: Request<{ propertyId: string }>, res: Response) => {

@@ -2,6 +2,7 @@ import db from "src/db";
 import {
   preparedAddLikeToProperty,
   preparedDecreaseLikeOfProperty,
+  preparedGetListOfFavouritedPropertyOfUser,
   preparedGetListOfProperties,
   preparedGetPropertyByItsId,
   preparedIncreaseLikeOfProperty,
@@ -91,8 +92,19 @@ export const likeProperty = async (propertyId: string, userId: string) => {
   }
 };
 
+/**
+ * @param propertyId        string - id of the property
+ * @param userId            string - id of the user
+ * @returns                 boolean - true if the current user has liked the property
+ */
 export const hasUserAlreadyLikedProperty = async (propertyId: string, userId: string) => {
   const [userHasAlreadyLikedProperty] = await preparedUserHasLikedProperty.execute({ propertyId, userId });
 
   return userHasAlreadyLikedProperty ? true : false;
+};
+
+export const listOfLikedPropertiesOfUser = async (userId: string) => {
+  const likedPropetiesList = await preparedGetListOfFavouritedPropertyOfUser.execute({ userId });
+
+  return likedPropetiesList;
 };

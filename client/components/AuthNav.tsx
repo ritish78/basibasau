@@ -57,6 +57,13 @@ export default function AuthNav() {
             </p>
             <p className="text-xs text-gray-500 truncate">{user.email}</p>
           </div>
+          <Link
+            href={`/favourites`}
+            onClick={() => setDropdownOpen(false)}
+            className="block w-full text-left text-sm px-3 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            My favourites ♡
+          </Link>
           <button
             onClick={() => {
               logout();

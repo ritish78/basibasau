@@ -1,6 +1,6 @@
 import { user } from "src/models/user";
 import db from ".";
-import { and, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { property } from "src/models/property";
 import { favourites } from "src/models/favourites";
 
@@ -117,3 +117,15 @@ export const preparedDecreaseLikeOfProperty = db
   .set({ likes: sql`${property.likes} - 1` })
   .where(eq(property.id, sql.placeholder("propertyId")))
   .prepare("decrease-property-like");
+
+/**
+ * @param userId      string - uuid of the user
+ * @returns           array - uuid of the property that the user has liked
+ */
+export const preparedGetListOfFavouritedPropertyOfUser = db
+  .select({ property })
+  .from(favourites)
+  .innerJoin(property, eq(favourites.propertyId, property.id))
+  .where(eq(favourites.userId, sql.placeholder("userId")))
+  .orderBy(desc(favourites.favouritedAt))
+  .prepare("get-list-of-favourited-property");
