@@ -129,3 +129,26 @@ export const preparedGetListOfFavouritedPropertyOfUser = db
   .where(eq(favourites.userId, sql.placeholder("userId")))
   .orderBy(desc(favourites.favouritedAt))
   .prepare("get-list-of-favourited-property");
+
+/**
+ * @params sellerId       string - uuid of the user
+ * @params title          string - title of the property listing
+ * @params description    string - description of the property
+ * @params sale           boolean - true if is on sale
+ * @params address        string - adrress of the property
+ * @params price          string - price of the property
+ * @params imageUrl       string[] - links of the images
+ */
+export const preparedAddNewProperty = db
+  .insert(property)
+  .values({
+    sellerId: sql.placeholder("sellerId"),
+    title: sql.placeholder("title"),
+    description: sql.placeholder("description"),
+    sale: sql.placeholder("sale"),
+    address: sql.placeholder("address"),
+    price: sql.placeholder("price"),
+    imageUrl: sql`${sql.placeholder("imageUrl")}`,
+  })
+  .returning()
+  .prepare("add-new-property");

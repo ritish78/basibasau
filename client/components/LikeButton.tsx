@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
-
-const BACKEND_API_BASE_URL = "http://localhost:5000/api/v1";
+import { BACKEND_API_BASE_URL } from "@/lib/constants";
 
 export default function LikeButton({ propertyId, likes }: { propertyId: string; likes: number }) {
   const { isAuthenticated } = useAuth();

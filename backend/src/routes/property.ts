@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { dummyPropertyData } from "seed";
 import {
+  addNewProperty,
   getListOfProperties,
   getPropertyByItsId,
   hasUserAlreadyLikedProperty,
@@ -29,6 +30,31 @@ router.route("/seed-property").post(isLoggedIn, async (req: Request, res: Respon
     console.log("Error while seeding the property to database!");
     res.status(500).send({ message: "Could not seed property info to database!" });
   }
+});
+
+/**
+ * @route               /api/v1/property/new
+ * @method              POST
+ * @params title        string - title of the property
+ * @params description  string - description of the property
+ * @params sale         boolean - is property on sale or on rent. true if is on sale
+ * @params address      string - address of the property
+ * @params price        string - price of property (without comma and Rs or $) E.g. 40000
+ * @params imageUrl     string[] - link of the property images
+ * @desc                Add new property
+ * @access              Auth User
+ */
+router.route("/new").post(isLoggedIn, async (req: Request, res: Response) => {
+  const { title, description, sale, address, price, imageUrl } = req.body;
+
+  const userId = req.session.userId;
+  if (!userId) {
+    throw new AuthError("Login to continue!");
+  }
+
+  const addedProperty = await addNewProperty(userId, title, description, sale, address, price, imageUrl);
+
+  res.status(201).send({ message: "Added new property!", property: addedProperty });
 });
 
 /**

@@ -1,12 +1,13 @@
 import { Property } from "@/types/property.types";
 import { cookies } from "next/headers";
+import { BACKEND_API_BASE_URL } from "./constants";
 
 export default async function getFavourites(): Promise<Property[]> {
   try {
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get("connect.sid");
 
-    const res = await fetch("http://localhost:5000/api/v1/property/favourites", {
+    const res = await fetch(`${BACKEND_API_BASE_URL}/property/favourites`, {
       cache: "no-store",
       headers: {
         Cookie: `connect.sid=${sessionCookie?.value}`,

@@ -9,7 +9,6 @@ export default function PropertyCard({ property }: { property: Property }) {
   return (
     <Link href={`/property/${property.id}`} className="group block">
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 transition-colors">
-        {/* Image */}
         <div className="h-48 bg-gray-100 overflow-hidden relative">
           {property.imageUrl?.[0] ? (
             <Image
@@ -32,8 +31,6 @@ export default function PropertyCard({ property }: { property: Property }) {
             </div>
           )}
         </div>
-
-        {/* Info */}
         <div className="p-4">
           <div className="flex items-center justify-between mb-2">
             <span

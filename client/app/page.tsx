@@ -1,9 +1,10 @@
 import PropertyCard from "@/components/PropertyCard";
+import { BACKEND_API_BASE_URL } from "@/lib/constants";
 import { Property } from "@/types/property.types";
 
 async function getProperties(): Promise<Property[]> {
   try {
-    const res = await fetch("http://localhost:5000/api/v1/property", {
+    const res = await fetch(`${BACKEND_API_BASE_URL}/property`, {
       cache: "no-store",
     });
     if (!res.ok) return [];

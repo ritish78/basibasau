@@ -1,6 +1,7 @@
 import db from "src/db";
 import {
   preparedAddLikeToProperty,
+  preparedAddNewProperty,
   preparedDecreaseLikeOfProperty,
   preparedGetListOfFavouritedPropertyOfUser,
   preparedGetListOfProperties,
@@ -11,7 +12,7 @@ import {
   preparedUserHasLikedProperty,
 } from "src/db/preparedStatement";
 import { property } from "src/models/property";
-import { BadRequestError, NotFoundError } from "src/utils/error";
+import { NotFoundError } from "src/utils/error";
 
 /**
  * @param dummyPropertyData array of property
@@ -107,4 +108,26 @@ export const listOfLikedPropertiesOfUser = async (userId: string) => {
   const likedPropetiesList = await preparedGetListOfFavouritedPropertyOfUser.execute({ userId });
 
   return likedPropetiesList;
+};
+
+export const addNewProperty = async (
+  userId: string,
+  title: string,
+  description: string,
+  sale: boolean,
+  address: string,
+  price: string,
+  imageUrl: string[],
+) => {
+  const newProperty = await preparedAddNewProperty.execute({
+    sellerId: userId,
+    title,
+    description,
+    sale,
+    address,
+    price,
+    imageUrl,
+  });
+
+  return newProperty;
 };

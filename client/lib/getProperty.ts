@@ -1,8 +1,9 @@
 import { Property } from "@/types/property.types";
+import { BACKEND_API_BASE_URL } from "./constants";
 
 export default async function getProperty(propertyId: string): Promise<Property | null> {
   try {
-    const res = await fetch(`http://localhost:5000/api/v1/property/${propertyId}`, {
+    const res = await fetch(`${BACKEND_API_BASE_URL}/property/${propertyId}`, {
       cache: "no-store",
     });
     if (!res.ok) return null;
