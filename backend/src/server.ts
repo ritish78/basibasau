@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import authRoute from "./routes/auth";
 import propertyRoute from "./routes/property";
+import cors from "cors";
+import cookies from "cookie-parser";
 
 import session from "express-session";
 import redisClient from "./db/redis";
@@ -12,6 +14,7 @@ redisClient.connect();
 const app = express();
 
 app.use(express.json());
+app.use(cookies());
 
 const redisStore = new RedisStore({ client: redisClient });
 
@@ -21,6 +24,15 @@ declare module "express-session" {
     email: string;
   }
 }
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 
 app.use(
   session({

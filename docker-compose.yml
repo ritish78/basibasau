@@ -35,6 +35,15 @@ services:
     networks:
       - basibasaunetwork
 
+  basibasauredis:
+    container_name: basibasauredis
+    image: redis:8-alpine
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    networks:
+      - basibasaunetwork
+
   adminerbasibasau:
     container_name: adminerbasibasau
     image: adminer:5

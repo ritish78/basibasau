@@ -2,7 +2,7 @@ import { preparedFetchUserByEmail, preparedRegisterUser } from "src/db/preparedS
 import { AppError, AuthError, NotFoundError } from "src/utils/error";
 import hashPassword, { passwordMatches } from "src/utils/hashPassword";
 
-const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string) => {
   const [userFromDatabase] = await preparedFetchUserByEmail.execute({ email: email.trim() });
 
   return userFromDatabase;
@@ -24,7 +24,14 @@ export const registerUser = async (firstName: string, lastName: string, email: s
 
   const hashedPassword = await hashPassword(password);
 
-  await preparedRegisterUser.execute({ firstName, lastName, email, password: hashedPassword });
+  const [registeredUser] = await preparedRegisterUser.execute({
+    firstName,
+    lastName,
+    email,
+    password: hashedPassword,
+  });
+
+  return registeredUser;
 };
 
 /**

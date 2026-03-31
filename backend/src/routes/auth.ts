@@ -1,5 +1,5 @@
 import { NextFunction, Router, Request, Response } from "express";
-import { loginUser, registerUser } from "src/controller/authController";
+import { getUserByEmail, loginUser, registerUser } from "src/controller/authController";
 import isLoggedIn from "src/middleware/isLoggedIn";
 import { AppError, NotFoundError } from "src/utils/error";
 
@@ -22,7 +22,11 @@ router.route("/register").post(async (req: Request, res: Response) => {
 
     console.log(firstName, lastName, email, password);
 
-    await registerUser(firstName, lastName, email, password);
+    const newUser = await registerUser(firstName, lastName, email, password);
+
+    req.session.userId = newUser.id;
+    req.session.email = newUser.email;
+    req.session.save();
 
     return res.status(201).send({ message: "Registered Successfully!" });
   } catch (error) {
@@ -86,6 +90,21 @@ router.route("/logout").post(isLoggedIn, async (req: Request, res: Response) => 
       res.clearCookie("connect.sid");
       return res.status(200).send({ message: "Logged out successfully!" });
     }
+  });
+});
+
+router.route("/me").get(isLoggedIn, async (req: Request, res: Response) => {
+  //Only making IDE happy. isLoggedIn middleware should handle it.
+  if (!req.session.email) {
+    return res.status(400).send({ message: "Login to continue!" });
+  }
+
+  const userBySessionEmail = await getUserByEmail(req.session.email);
+
+  return res.status(200).send({
+    firstName: userBySessionEmail.firstName,
+    lastName: userBySessionEmail.lastName,
+    email: userBySessionEmail.email,
   });
 });
 

@@ -19,6 +19,7 @@ export const preparedRegisterUser = db
     email: sql.placeholder("email"),
     password: sql.placeholder("password"),
   })
+  .returning()
   .prepare("register-user");
 
 /**
