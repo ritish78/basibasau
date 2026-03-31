@@ -11,7 +11,7 @@ export const property = pgTable("property", {
   sellerId: uuid("seller_id").references(() => user.id, { onDelete: "cascade" }),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description").notNull(),
-  sale: boolean("on_sale").notNull().default(true),
+  sale: boolean("sale").notNull().default(true),
   address: text("address").notNull(),
   price: varchar("price", { length: 15 }).notNull(),
   imageUrl: text("image_url").array(),

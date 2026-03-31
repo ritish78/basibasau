@@ -7,15 +7,35 @@ services:
     ports:
       - 5000:5000
     environment:
-      - POSGRES_URL=postgresql://admin:root@basibasaupostgres:5432/basibasau
+      - POSTGRES_URL=postgresql://admin:root@basibasaupostgres:5432/basibasau
     env_file:
       - ./backend/.env
     networks:
       - basibasaunetwork
     depends_on:
       - basibasaupostgres
+      - basibasauredis
     volumes:
       - ./backend:/home/basibasau
+      - /home/basibasau/node_modules
+    command: npm run dev
+
+  basibasauclient:
+    container_name: basibasauclient
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    environment:
+      - API_URL=http://basibasaubackend:5000/api/v1
+      - NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
+    ports:
+      - 3000:3000
+    depends_on:
+      - basibasaubackend
+    networks:
+      - basibasaunetwork
+    volumes:
+      - ./client:/home/basibasau
       - /home/basibasau/node_modules
     command: npm run dev
 
